@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Students</title>
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div>
+        <label>Name</label>
+        <input id="name" placeholder="Name"><br>
+        <label>Faculty number</label>
+        <input id="number" placeholder="facultyNumber"><br>
+        <label>Courses</label>
+        <input id="courses" placeholder="Courses"><br>
+    </div><br>
+
+    <div>
+        <button id="create" type="button" class="btn btn-primary">Create student</button>
+        <button id="update" type="button" class="btn btn-primary">Update student</button>
+        <button id="list" type="button" class="btn btn-primary">List students</button>
+        <button id="delete" type="button" class="btn btn-primary">Delete student</button>
+    </div><br>
+
+    <div id="table-students">
+    </div>   
+
+    <script id="template-table" type="text/x-handlebars-template">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Faculty number</th>
+                    <th>Courses</th>
+                </tr>
+            </thead>
+            <tbody>
+            {{#each object}}
+            <tr>
+                <td>{{this.name}}</td>
+                <td>{{this.facultyNumber}}</td>
+                <td>{{this.courses}}</td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </script>
+
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/handlebars/handlebars.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
