@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Snake</title>
+</head>
+<body>
+    <canvas id="hackCanvas" width="400" height="400" style="border: 1px solid">
+    </canvas>
+    <script>
+        var c = document.getElementById("hackCanvas");
+        var ctx = c.getContext("2d");
+
+        var canvasWidth = document.getElementById("hackCanvas").width;
+        var canvasHeight = document.getElementById("hackCanvas").height;
+        
+        function Tile(x, y, size, ctx) {
+            this.x = x;
+            this.y = y;
+            this.ctx = ctx;
+            this.size = size;
+
+            this.print = function() {
+                this.ctx.fillStyle = "red";
+                this.ctx.fillRect(this.x*size, this.y*size, 10, 10);
+            }
+        }
+
+        var food = (function(ctx) {
+            var tile = new Tile(18, 18, 10, ctx);
+
+            var generateNewPosition = function() {
+                var x = Math.floor((Math.random() * (canvasWidth - 10) / 10) + 1);
+                var y = Math.floor((Math.random() * (canvasHeight - 10) / 10) + 1);
+                tile = new Tile(x, y, 10, ctx);
+            }
+
+            var print = function() {
+                tile.print();               
+            }
+
+            var getPosition = function() {
+                return tile;
+            }
+
+            return {
+                print: print,
+                generateNewPosition:generateNewPosition,
+                getPosition: getPosition
+            }
+        }(ctx));
+
+        var snake = (function(ctx) {
+            var body = [];
+            var head = new Tile(4, 0, 10, ctx);
+            var direction = "right";
+            function changeDirection(e) {
+                console.log(e);
+                switch(e.keyCode) {
+                    case 37:
+                        direction = "left";
+                        break;
+                    case 38:
+                        direction = "up";
+                        break;
+                    case 39:
+                        direction = "right";
+                        break;
+                    case 40:
+                        direction = "down";
+                        break; 
+                }
+            } 
+
+            [1, 2, 3].forEach(function(i) {
+                body.push(new Tile(i, 0, 10, ctx));
+            });
+
+            body.push(head);
+
+            var print = function() {
+                    body.forEach(function(i) {
+                        i.print();
+                    });
+            }
+ 
+            var move = function() {
+                var new_head;
+                if(direction === "right") {
+                    new_head = new Tile(head.x + 1, head.y, 10, ctx);
+                }
+                if(direction === "left") {
+                    new_head = new Tile(head.x - 1, head.y, 10, ctx);
+                }
+                if(direction === "up") {
+                    new_head = new Tile(head.x, head.y - 1, 10, ctx);
+                }
+                if(direction === "down") {
+                    new_head = new Tile(head.x, head.y + 1, 10, ctx);
+                }
+                body.push(new_head);
+                body.shift();
+                head = new_head; 
+            }
+
+            var eat = function() {
+                var tile = food.getPosition();         
+                if(head.x === tile.x && head.y === tile.y) {
+                    body.push(tile);
+                    food.generateNewPosition();
+               }
+               
+            }
+
+
+
+            return {
+                print:print,
+                move:move,
+                changeDirection: changeDirection,
+                eat: eat,
+                //endOfGame: endOfGame
+                }
+        }(ctx));
+        
+        food.generateNewPosition();
+        setInterval(function() {
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            snake.move();
+            snake.print();
+            food.print();
+            snake.eat();
+            //snake.endOfGame();
+
+        }, 100);
+
+        var size = 10;
+        var p1 = new Tile(3, 3, size, ctx);
+        //p1.print();
+        //snake.print();       
+        
+        window.addEventListener("keydown", snake.changeDirection, true);
+
+
+
+
+        /*            var endOfGame = function() {
+                if(head.x*10 === canvasWidth || head.y*10 === canvasHeight) {
+                    ctx.font="30px Georgia";
+                    ctx.fillStyle = "red";
+                    ctx.fillText("GAME OVER", 100, 100);
+                    
+
+                }
+
+                body.forEach(function(tile) {
+                    //tile.pop();
+                    console.log(tile);
+                    console.log("vvvvvvvvvvvvvvvvv");
+                    console.log(head);
+                    if(head.x === tile.x && head.y === tile.y) {
+                        console.log("a");
+                    }
+                });
+            }*/
+/*
+            var score = function() {
+                var count = 0;
+                if(head.x === )
+            }*/
+    </script>    
+
+<script src="bower_components/jquery/dist/jquery.js"></script>
+</body>
+</html>
